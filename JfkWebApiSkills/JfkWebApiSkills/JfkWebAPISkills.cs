@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.CognitiveSearch.Search;
-using Microsoft.CognitiveSearch.Skills.Cryptonyms;
 using Microsoft.CognitiveSearch.Skills.Hocr;
 using Microsoft.CognitiveSearch.Skills.Image;
 using Newtonsoft.Json;
@@ -44,30 +43,6 @@ namespace Microsoft.CognitiveSearch.WebApiSkills
             return (ActionResult)new OkObjectResult(facetGraph);
         }
 
-        [FunctionName("link-cryptonyms")]
-        public static IActionResult RunCryptonymLinker([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
-        {
-            string skillName = executionContext.FunctionName;
-            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
-            if (requestRecords == null)
-            {
-                return new BadRequestObjectResult($"{skillName} - Invalid request record array.");
-            }
-
-            CryptonymLinker cryptonymLinker = new CryptonymLinker(executionContext.FunctionAppDirectory);
-            WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
-                (inRecord, outRecord) => {
-                    string word = inRecord.Data["word"] as string;
-                    if (word.All(Char.IsUpper) && cryptonymLinker.Cryptonyms.TryGetValue(word, out string description))
-                    {
-                        outRecord.Data["cryptonym"] = new { value = word, description };
-                    }
-                    return outRecord;
-                });
-
-            return (ActionResult)new OkObjectResult(response);
-        }
-        
         [FunctionName("image-store")]
         public static async Task<IActionResult> RunImageStore([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]HttpRequest req, TraceWriter log, ExecutionContext executionContext)
         {
@@ -110,15 +85,10 @@ namespace Microsoft.CognitiveSearch.WebApiSkills
             WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skillName, requestRecords,
                 (inRecord, outRecord) => {
                     List<OcrImageMetadata> imageMetadataList = JsonConvert.DeserializeObject<List<OcrImageMetadata>>(JsonConvert.SerializeObject(inRecord.Data["ocrImageMetadataList"]));
-                    Dictionary<string, string> annotations = JsonConvert.DeserializeObject<JArray>(JsonConvert.SerializeObject(inRecord.Data["wordAnnotations"]))
-                                                    .GroupBy(o => o["value"].Value<string>())
-                                                    .Select(g => g.First())
-                                                    .ToDictionary(o => o["value"].Value<string>(), o => o["description"].Value<string>());
-
                     List<HocrPage> pages = new List<HocrPage>();
                     for(int i = 0; i < imageMetadataList.Count; i++)
                     {
-                        pages.Add(new HocrPage(imageMetadataList[i], i, annotations));
+                        pages.Add(new HocrPage(imageMetadataList[i], i));
                     }
                     HocrDocument hocrDocument = new HocrDocument(pages);
                     outRecord.Data["hocrDocument"] = hocrDocument;

@@ -38,7 +38,7 @@ namespace Microsoft.CognitiveSearch.Skills.Hocr
         StringWriter metadata = new StringWriter();
         StringWriter text = new StringWriter() { NewLine = " " };
 
-        public HocrPage(OcrImageMetadata imageMetadata, int pageNumber, Dictionary<string,string> wordAnnotations = null)
+        public HocrPage(OcrImageMetadata imageMetadata, int pageNumber)
         {
             // page
             metadata.WriteLine($"<div class='ocr_page' id='page_{pageNumber}' title='image \"{imageMetadata.ImageStoreUri}\"; bbox 0 0 {imageMetadata.Width} {imageMetadata.Height}; ppageno {pageNumber}'>");
@@ -70,13 +70,8 @@ namespace Microsoft.CognitiveSearch.Skills.Hocr
                 
                 foreach (NormalizedWord word in words)
                 {
-                    string annotation = "";
-                    if (wordAnnotations != null && wordAnnotations.TryGetValue(word.Text, out string wordAnnotation))
-                    {
-                        annotation = $"data-annotation='{wordAnnotation}'";
-                    }
                     string bbox = word.BoundingBox != null && word.BoundingBox.Count == 4 ? $"bbox {word.BoundingBox[0].X} {word.BoundingBox[0].Y} {word.BoundingBox[2].X} {word.BoundingBox[2].Y}" : "";
-                    metadata.WriteLine($"<span class='ocrx_word' id='word_{pageNumber}_{li}_{wi}' title='{bbox}' {annotation}>{word.Text}</span>");
+                    metadata.WriteLine($"<span class='ocrx_word' id='word_{pageNumber}_{li}_{wi}' title='{bbox}'>{word.Text}</span>");
                     text.WriteLine(word.Text);
                     wi++;
                 }

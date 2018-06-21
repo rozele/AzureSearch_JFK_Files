@@ -50,15 +50,6 @@
             "facetable": true
         },
         {
-            "name": "cryptonyms",
-            "type": "Collection(Edm.String)",
-            "searchable": false,
-            "filterable": true,
-            "retrievable": true,
-            "sortable": false,
-            "facetable": true
-        },
-        {
             "name": "demoBoost",
             "type": "Edm.Int32",
             "searchable": false,
@@ -111,7 +102,7 @@
     },
     "suggesters": [
         {
-            "name": "sg-jfk",
+            "name": "sg-entities",
             "searchMode": "analyzingInfixMatching",
             "sourceFields": [ "entities" ]
         }
