@@ -7,7 +7,6 @@ import { SearchComponent } from "./components/search";
 import { ItemCollectionViewComponent } from "./components/item";
 import { FacetViewComponent } from "./components/facets";
 import { HorizontalSeparator } from "./../../common/components/horizontal-separator";
-import { GraphViewComponent } from "./components/graph";
 import { SpacerComponent } from "./components/spacer";
 import {
   ItemCollection,
@@ -20,7 +19,6 @@ import {
 } from "./view-model";
 import { Service } from "./service";
 import { Pagination } from "../../common/components/pagination/pagination";
-import { PlaceholderComponent } from "./components/placeholder";
 import { FooterComponent } from "../../common/components/footer";
 
 const style = require("./search-page.style.scss");
@@ -49,7 +47,6 @@ interface SearchPageProps {
   onMenuClick: () => void;
   onLoadMore: (pageIndex: number) => void;
   onChangeResultViewMode: (newMode: ResultViewMode) => void;
-  onGraphNodeDblClick: (searchValue: string) => void;
 }
 
 const DrawerAreaComponent = (props: SearchPageProps) => (
@@ -108,30 +105,22 @@ class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> 
   render() {
     return (
       <>
-        <PlaceholderComponent />
         <SpacerComponent>
-          {
-            this.props.resultViewMode === "graph" ?
-              <GraphViewComponent
-                searchValue={this.props.activeSearch}
-                onGraphNodeDblClick={this.props.onGraphNodeDblClick}
-              /> :
-              <div>
-                <ItemCollectionViewComponent
-                  items={this.props.itemCollection}
-                  listMode={this.props.resultViewMode === "list"}
-                  activeSearch={this.props.activeSearch}
-                  targetWords={this.props.targetWords}
-                  onClick={this.props.onItemClick}
-                />
-                <Paginator
-                  pageIndex={this.props.pageIndex}
-                  resultsPerPage={this.props.resultsPerPage}
-                  resultCount={this.props.resultCount}
-                  onLoadMore={this.props.onLoadMore}
-                />
-              </div>
-          }
+          <div>
+            <ItemCollectionViewComponent
+              items={this.props.itemCollection}
+              listMode={this.props.resultViewMode === "list"}
+              activeSearch={this.props.activeSearch}
+              targetWords={this.props.targetWords}
+              onClick={this.props.onItemClick}
+            />
+            <Paginator
+              pageIndex={this.props.pageIndex}
+              resultsPerPage={this.props.resultsPerPage}
+              resultCount={this.props.resultCount}
+              onLoadMore={this.props.onLoadMore}
+            />
+          </div>
         </SpacerComponent>
       </>
     );
@@ -158,7 +147,6 @@ const SearchPageComponent = (props: SearchPageProps) => (
         resultCount={props.resultCount}
         onItemClick={props.onItemClick}
         onLoadMore={props.onLoadMore}
-        onGraphNodeDblClick={props.onGraphNodeDblClick}
         resultViewMode={props.resultViewMode}
       />
       <HorizontalSeparator />

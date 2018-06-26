@@ -40,22 +40,12 @@ export const ResultViewModeToggler = (props: ViewModeTogglerProps) => {
       >
         &#xe903;
       </IconButton>
-      {
-        false &&
-        <IconButton
-          classes={iconStyle("grid")}
-          color={toggleColorFunc("grid")}
-          onClick={notifyModeChangedFunc("grid")}
-        >
-          &#xe902;
-        </IconButton>
-      }
       <IconButton
-        classes={iconStyle("graph")}
-        color={toggleColorFunc("graph")}
-        onClick={notifyModeChangedFunc("graph")}
+        classes={iconStyle("grid")}
+        color={toggleColorFunc("grid")}
+        onClick={notifyModeChangedFunc("grid")}
       >
-        &#xe904;
+        &#xe902;
       </IconButton>
     </>
   );

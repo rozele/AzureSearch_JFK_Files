@@ -5,12 +5,12 @@
 $font-path: "../assets/fonts";
 
 @font-face {
-  font-family: "jfk-icons";
+  font-family: "search-icons";
   src:
-    url("#{$font-path}/jfk-icons.eot") format("embedded-opentype"),
-    url("#{$font-path}/jfk-icons.ttf") format("truetype"),
-    url("#{$font-path}/jfk-icons.woff") format("woff"),
-    url("#{$font-path}/jfk-icons.svg") format("svg");
+    url("#{$font-path}/search-icons.eot") format("embedded-opentype"),
+    url("#{$font-path}/search-icons.ttf") format("truetype"),
+    url("#{$font-path}/search-icons.woff") format("woff"),
+    url("#{$font-path}/search-icons.svg") format("svg");
   font-weight: normal;
   font-style: normal;
 }

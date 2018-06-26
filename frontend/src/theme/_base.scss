@@ -1,10 +1,5 @@
 // Setup body.
 
-// To get the bundler adding this image
-.body-bkg {
-  background: url("../assets/img/bg.jpg");
-}
-
 body {
   margin: 0;
 
@@ -14,8 +9,6 @@ body {
   // Default background style.
   color: $colorWhite;
   background-color: $colorPrimaryDarker;
-  // This will loaded once the react app is ready
-  // background: url("../assets/img/bg.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -2,7 +2,7 @@
 @import "./../../../../theme/_palette.scss";
 
 .icon {
-  @include jfk-icon;
+  @include search-icon;
 
   transition: color 0.25s ease-out;
 

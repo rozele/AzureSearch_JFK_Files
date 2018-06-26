@@ -38,6 +38,8 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
     } else if (this.props.location.search) {
       const receivedSearchValue = parse(this.props.location.search.substring(1));
       this.handleReceivedSearchValue(receivedSearchValue.term);
+    } else {
+      this.handleReceivedSearchValue('*');
     }
   }
 
@@ -49,11 +51,6 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
       this.handleSearchSubmit
     );
     this.schedulePulseOff();
-  }
-
-  private onGraphNodeDblClick = (value: string) => {
-    const searchValue = `${this.state.searchValue} ${value}`;
-    this.handleReceivedSearchValue(searchValue);
   }
 
   private schedulePulseOff = () => {
@@ -199,7 +196,6 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           onLoadMore={this.handleLoadMore}
           resultViewMode={this.state.resultViewMode}
           onChangeResultViewMode={this.handleResultViewMode}
-          onGraphNodeDblClick={this.onGraphNodeDblClick}
         />
       </div>
     );
